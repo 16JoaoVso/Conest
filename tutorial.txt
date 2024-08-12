@@ -1,0 +1,48 @@
+Ligação do banco de dados do mongodb ou o electron
+
+Passo 1:
+Ter um servidor de banco de dados com electron
+- localhost (Instalado com o Windows) (ambiente de desenvolvimento)
+- físico (baseado no Linux) em uma rede local (switch) (desktop)
+- nuvem (atlas (free 540mb AWS)) (back-end(netflix, e-commerce etc))
+
+Passo 2:
+Instalar o mongoose (framework para trabalhar o MongoDB)
+
+Passo 3:
+Criar um arquivo database.js na raize configurar a conexão com o banco de dados
+
+Passo 4:
+Importar no main os métodos para conectar e desconectar o banco de dados
+
+Passo 5:
+Na janela principal, deixar o objeto win publico(gerenciar o banco)
+
+Passo 6:
+Criar uma função para verificar o status de conexão (criar após ultima linha do main) este passo poderia estar junto com o app.whenReady(), por uma questão de organização e melhor entendimento
+
+Passo 7:
+Dentro de app.whenReady() 
+executar a função statusConexao()
+
+Passo 8:
+Importante ! Dentro do app.whenReady()
+criar um método para desconectar o banco de dados quando a janela principal for fechada
+
+Passo 9:
+Usar preload.js e IPC (ipcRenderer e ipcMain) para criar uma regra que permita modificar o icone do banco de dados
+
+Passo 10:
+Criar pasta models
+
+Passo 11:
+- Criar o modelo para clientes
+Cliente.js (primeira letra maiuscula)
+
+Passo 12:
+- Importar o schema de main.js
+
+Passo 13:
+Seguir o Slides fornecido
+
+CRUD Create(Criar/Insert), Read(select/ler), Update(Atualizar), Delete (apagar)

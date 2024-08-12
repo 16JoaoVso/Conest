@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- evitar ataques de Cross Site Scripting (injeção de dados)-->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'"> -->
+    <title>Fornecedores</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+
+    <!-- css personalizado -->
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+
+</head>
+
+<div class="container">
+    <h1>Fornecedores</h1>
+    <form class="row g-2 " id="frmFornecedor">
+
+        <div class="col-6">
+            <input type="text" class="form-control" id="inputSearch" maxlength="30" spellcheck="false">
+        </div>
+
+        <div class="col-6">
+            <button type="button" class="btn btn-warning" onclick="buscarFornecedor()" id="btnRead">Buscar</button>
+        </div>
+
+        <hr class="border border-danger border-1 opacity-75">
+
+        <div class="col-12">
+            <input type="text" class="form-control" id="inputId">
+        </div>
+
+
+        <div class="col-md-6">
+            <label for="inputName" class="form-label">Razão Social</label>
+            <input type="text" class="form-control" id="inputName" required maxlength="30" spellcheck="false">
+        </div>
+
+
+        <div class="col-md-4">
+            <label for="inputCnpj" class="form-label">CNPJ</label>
+            <input type="number" class="form-control" id="inputCnpj" required maxlength="14" spellcheck="false">
+        </div>
+
+        <div class="col-md-4">
+            <label for="inputPhone" class="form-label">Telefone</label>
+            <input type="tel" class="form-control" id="inputPhone" required maxlength="15" spellcheck="false">
+        </div>
+        <div class="col-md-6">
+            <label for="inputAddress" class="form-label">E-Mail do Fornecedor </label>
+            <input type="email" class="form-control" id="inputEmail" required maxlength="30" spellcheck="false">
+        </div>
+
+        <div class="col-md-4">
+            <label for="inputCep" class="form-label">CEP</label>
+            <input type="text" class="form-control" id="inputCep" maxlength="9" spellcheck="false">
+
+        </div>
+
+        <div class="col-md-4">
+            <button type="button" class="btn btn-warning" id="btnSearchCep">Buscar</button>
+        </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="logradouro" class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="logradouro">
+                </div>
+                <div class="col-md-4">
+                    <label for="logradouro" class="form-label">Numero</label>
+                    <input type="text" class="form-control" id="numero">
+                </div>
+                <div class="col-md-4">
+                    <label for="complemento" class="form-label">Complemento</label>
+                    <input type="text" class="form-control" id="complemento">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" class="form-control" id="bairro">
+                </div>
+                <div class="col-md-4">
+                    <label for="localidade" class="form-label">Cidade</label>
+                    <input type="text" class="form-control" id="localidade">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <label for="uf" class="form-label">UF</label>
+                    <input type="text" class="form-control" id="uf">
+                </div>
+            </div>
+        </div>
+
+        <!-- botões-->
+        <div class="container col-12">
+            <br>
+            <button type="submit" class="btn btn-warning" id="btnCreate">Adicionar</button>
+            <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
+            <button type="submit" class="btn btn-warning" id="btnDelete">Excluir</button>
+            <button type="reset" class="btn" id="btnReset"></button>
+        </div>
+    </form>
+</div>
+<script src="../public/js/bootstrap.min.js"></script>
+<script src="./script.js"></script>
+<script src="./fornecedor.js"></script>
+</body>
+
+</html>
