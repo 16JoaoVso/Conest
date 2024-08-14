@@ -1,4 +1,4 @@
-const { ipcMain, dialog } = require('electron')
+const { ipcMain, dialog, nativeTheme } = require('electron')
 const { app, BrowserWindow, Menu, shell } = require('electron/main')
 const path = require('node:path')
 
@@ -15,9 +15,9 @@ const clienteModel = require("./src/models/Cliente.js")
 
 
 // janela principal (definir o objeto win como variável pública)
-let win
 const createWindow = () => {
-    win = new BrowserWindow({
+    nativeTheme.themeSource = 'dark'
+    const win = new BrowserWindow({
         width: 800,
         height: 600,
         resizable: false,
@@ -289,6 +289,7 @@ ipcMain.on('new-client', async (event, cliente) => {
             foneCliente: cliente.foneCli,
             emailCliente: cliente.emailCli
         })
+        console.log(novoCliente)
         await novoCliente.save() //save() - moongoose
         dialog.showMessageBox({
             type: 'info',
@@ -296,12 +297,14 @@ ipcMain.on('new-client', async (event, cliente) => {
             message: 'Cliente cadastrado com sucesso',
             buttons: ['OK']
         })
+        event.reply('reset-form')
 
     } catch (error) {
         console.log(error)
     }
 }),
 
+    // Fornecedor
     ipcMain.on('new-fornecedor', async (event, fornecedor) => {
         console.log(fornecedor)
         try {
@@ -338,7 +341,7 @@ ipcMain.on('new-client', async (event, cliente) => {
 
 //CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Aviso (Busca: preechimento de campo obrigatório)
-ipcMain.on('dialog-infoSearchDialog', (event) => {
+ipcMain.on('dialog-infoSearchClient', (event) => {
     dialog.showMessageBox({
         type: 'warning',
         title: 'Atenção!',
@@ -361,12 +364,13 @@ ipcMain.on('search-client', async (event, nomeCliente) => {
                 type: 'warning',
                 title: 'Atenção!',
                 message: 'Cliente não cadastrado. \nDeseja cadastrar esse cliente?',
-                buttons: ['Sim', 'Não'],
-                defaultId: 0
+                defaultId: 0,
+                buttons: ['Sim', 'Não']
+                
             }).then((result)=>{
                 if(result.response === 0) {
                     // Setar o nome do cliente no form e habilitar cadastramento
-                    event.reply('name-client')
+                    event.reply('set-nameclient')
                 } else {
                     // limpar caixa de busca
                     event.reply('clear-search')
@@ -383,9 +387,56 @@ ipcMain.on('search-client', async (event, nomeCliente) => {
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //CRUD Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('update-client', async (event, cliente) => {
+    console.log(cliente) //Teste do passo 2 - slide
+
+   try {
+        const clienteEditado = await clienteModel.findByIdAndUpdate(
+            cliente.idCli,{
+            nomeCliente: cliente.nomeCli,
+            foneCliente: cliente.foneCli,
+            emailCliente: cliente.emailCli
+        },
+            {
+                new:true
+            }
+        )
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'aviso',
+            message: "Dados do cliente alterados com sucesso",
+            buttons:['OK']
+        })
+        event.reply('reset-form')
+        } catch (error) {
+        console.log(error)
+        
+    }
+    
+})
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('delete-client', (event, idCli) => {
+    console.log(idCli)
+        dialog.showMessageBox({
+            type: 'error',
+            title: 'ATENÇÃO!',
+            message: 'Tem certeza que deseja que esse cliente seja exlcuido ?',
+            buttons: ['Sim', 'Não'],
+            defaultId: 0
+        }).then(async (result)=>{
+            if(result.response === 0) {
+                
+             try {
+               await clienteModel.findByIdAndDelete(idCli)
+               event.reply('reset-form')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        })
+})
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
