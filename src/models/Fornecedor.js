@@ -3,7 +3,7 @@
 */
 const { model, Schema} = require('mongoose')
 
-const fornecedorSchema = new schema({
+const fornecedorSchema = new Schema({
     razaoFornecedor: {
         type: String
     },

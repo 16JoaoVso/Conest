@@ -78,7 +78,7 @@ function buscarCliente() {
         // Restaurar o comportamento da tecla enter
         // removerTeclaEnter()
         let setNomeCliente = document.getElementById('inputSearch').value
-        document.getElementById('inputName').value += setNomeCliente
+        document.getElementById('inputName').value = setNomeCliente
         document.getElementById('inputSearch').value = ""
         document.getElementById('inputSearch').disabled = true
         document.getElementById('inputSearch').blur()

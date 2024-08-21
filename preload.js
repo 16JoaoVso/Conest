@@ -37,5 +37,6 @@ contextBridge.exposeInMainWorld('api', {
     updateCliente: (cliente) => ipcRenderer.send('update-client', cliente), 
     deleteCliente: (idCli) => ipcRenderer.send('delete-client', idCli),
     updateFornecedor: (fornecedor) => ipcRenderer.send('update-supp', fornecedor), 
-    deleteFornecedor: (idFor) => ipcRenderer.send('delete-supp', idFor)
+    deleteFornecedor: (idFor) => ipcRenderer.send('delete-supp', idFor),
+    focusClient:(focusCliente) => ipcRenderer.on('focus-client', focusCliente)
 })

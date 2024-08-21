@@ -26,7 +26,7 @@ let ufFornecedor = document.getElementById ('uf')
 
 formFornecedor.addEventListener('submit', async(event)=>{
     event.preventDefault()
-    console.log(razaoFornecedor.value, foneFornecedor.value, emailFornecedor.value, cnpjFornecedor.value, cepFornecedor.value, enderecoFornecedor.value, numeroFornecedor.value, complementFornecedor.value, bairroFornecedor.value, cidadeFornecedor.value, ufFornecedor.value)
+    console.log(razaoFornecedor.value, foneFornecedor.value, emailFornecedor.value, cnpjFornecedor.value, cepFornecedor.value, enderecoFornecedor.value, numeroFornecedor.value, complementoFornecedor.value, bairroFornecedor.value, cidadeFornecedor.value, ufFornecedor.value)
 
     const fornecedor = {
         idFor: idFornecedor,
@@ -57,6 +57,7 @@ function buscarFornecedor() {
     } else {
         api.searchFornecedor(razaoFornecedor)
     }
+}
     api.focusSearch((args) => {
         document.getElementById('inputSearch').focus()
     })
@@ -76,9 +77,8 @@ function buscarFornecedor() {
     api.dataSupp((event, dadosSupp) => {
         arrayFornecedor = JSON.parse(dadosSupp)
         console.log(arrayFornecedor)
-    })
     arrayFornecedor.forEach((c) => {
-        document.getElementById('inputId').value = c.idFor
+        document.getElementById('inputId').value = c._id
         document.getElementById('inputName').value = c.razaoFornecedor
         document.getElementById('inputPhone').value = c.foneFornecedor
         document.getElementById('inputEmail').value = c.emailFornecedor
@@ -102,12 +102,12 @@ function buscarFornecedor() {
        document.getElementById("btnUpdate").disabled = false
        document.getElementById("btnDelete").disabled = false
     })
-}
+})
 
 function editarFornecedor() {
     const fornecedor = {
         // Passo 1
-        idFor: idFornecedor,
+        idFor: idFornecedor.value,
         razaoFor: razaoFornecedor.value,
         foneFor: foneFornecedor.value,
         emailFor: emailFornecedor.value,
@@ -128,4 +128,31 @@ function excluirFornecedor() {
     let idFor = idFornecedor.value
     console.log(idFor)
     api.deleteFornecedor(idFor)
+}
+ 
+
+api.focusClient((focusClient) => {
+    //remover o foco e desativar a caixa de busca
+    document.getElementById('inputSearch').disabled = true
+    document.getElementById("inputSearch").blur()
+    //desativar os botão adicionar e buscar
+    document.getElementById("btnCreate").disabled = true
+    document.getElementById("btnRead").disabled = true
+    // ativar os botões update e delete
+    document.getElementById("btnUpdate").disabled = false
+    document.getElementById("btnDelete").disabled = false
+})
+
+api.resetForm((args)=>{
+    resetForm()
+    formFornecedor.reset()
+})
+
+function resetForm() {
+    document.getElementById('inputSearch').disabled = false
+    document.getElementById('inputSearch').focus()
+    btnCreate.disabled = true
+    btnRead.disabled = false
+    btnUpdate.disabled = true
+    btnDelete.disabled = true
 }

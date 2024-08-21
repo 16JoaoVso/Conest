@@ -57,7 +57,7 @@
 
         <div class="col-md-4">
             <label for="inputCep" class="form-label">CEP</label>
-            <input type="text" class="form-control" id="inputCep" maxlength="9" spellcheck="false">
+            <input type="text" class="form-control" id="inputCep" required maxlength="9" spellcheck="false">
 
         </div>
 
@@ -68,11 +68,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="logradouro" class="form-label">Endereço</label>
-                    <input type="text" class="form-control" id="logradouro">
+                    <input type="text" class="form-control" id="logradouro" required>
                 </div>
                 <div class="col-md-4">
                     <label for="logradouro" class="form-label">Numero</label>
-                    <input type="text" class="form-control" id="numero">
+                    <input type="text" class="form-control" id="numero" required>
                 </div>
                 <div class="col-md-4">
                     <label for="complemento" class="form-label">Complemento</label>
@@ -82,11 +82,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="bairro" class="form-label">Bairro</label>
-                    <input type="text" class="form-control" id="bairro">
+                    <input type="text" class="form-control" id="bairro" required>
                 </div>
                 <div class="col-md-4">
                     <label for="localidade" class="form-label">Cidade</label>
-                    <input type="text" class="form-control" id="localidade">
+                    <input type="text" class="form-control" id="localidade" required>
                 </div>
             </div>
             <div class="row">
@@ -101,9 +101,9 @@
         <div class="container col-12">
             <br>
             <button type="submit" class="btn btn-warning" id="btnCreate">Adicionar</button>
-            <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
-            <button type="submit" class="btn btn-warning" id="btnDelete">Excluir</button>
-            <button type="reset" class="btn" id="btnReset"></button>
+            <button type="button" class="btn btn-warning" id="btnUpdate" onclick="editarFornecedor()">Editar</button>
+            <button type="button" class="btn btn-warning" id="btnDelete" onclick="excluirFornecedor()">Excluir</button>
+            <button type="reset" class="btn" id="btnReset" onclick="resetForm()"></button>
         </div>
     </form>
 </div>

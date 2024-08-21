@@ -12,6 +12,8 @@ let = dbCon = null
 
 //Importação do Schema das tabelas ("coleções")
 const clienteModel = require("./src/models/Cliente.js")
+const fornecedorModel = require("./src/models/Fornecedor.js")
+
 
 
 // janela principal (definir o objeto win como variável pública)
@@ -21,7 +23,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         resizable: false,
-        icon: './src/public/img/icon.png',
+        icon: './src/public/img/mercado.png',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -47,7 +49,7 @@ const aboutWindow = () => {
             autoHideMenuBar: true, //esconder o menu
             modal: true,
             parent: father,
-            icon: './src/public/img/ajuda.png'
+            icon: './src/public/img/sobre.png'
         })
     }
     // nativeTheme.themeSource = 'dark'
@@ -102,7 +104,7 @@ const suppWindow = () => {
             autoHideMenuBar: true, //esconder o menu
             modal: true,
             parent: father,
-            icon: './src/public/img/ajuda.png',
+            icon: './src/public/img/suppky.png',
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
@@ -131,7 +133,7 @@ const productWindow = () => {
             autoHideMenuBar: true, //esconder o menu
             modal: true,
             parent: father,
-            icon: './src/public/img/ajuda.png',
+            icon: './src/public/img/product2.png',
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
@@ -160,7 +162,7 @@ const reportsWindow = () => {
             autoHideMenuBar: true, //esconder o menu
             modal: true,
             parent: father,
-            icon: './src/public/img/ajuda.png',
+            icon: './src/public/img/report.png',
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
@@ -302,39 +304,9 @@ ipcMain.on('new-client', async (event, cliente) => {
     } catch (error) {
         console.log(error)
     }
-}),
-
-    // Fornecedor
-    ipcMain.on('new-fornecedor', async (event, fornecedor) => {
-        console.log(fornecedor)
-        try {
-            const novoFornecedor = new fornecedorModel({
+})
 
 
-
-
-
-
-
-
-
-
-
-
-
-            })
-            await novoFornecedor.save()
-            dialog.showMessageBox({
-                type: 'info',
-                title: 'Aviso',
-                message: 'Fornecedor cadastrado com sucesso',
-                buttons: ['OK']
-            })
-        }
-        catch (error) {
-            console.log(error)
-        }
-    })
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -356,7 +328,7 @@ ipcMain.on('search-client', async (event, nomeCliente) => {
     //Passo 2: Busca no banco de dados
     try {
         // find() é o "metodo de busca" newRegex 'i' case insetive
-        const dadosCliente = await clienteModel.find({nomeCliente: new RegExp(nomeCliente, 'i') }) // Passo 2
+        const dadosCliente = await clienteModel.find({ nomeCliente: new RegExp(nomeCliente, 'i') }) // Passo 2
         console.log(dadosCliente) // Passo 3: recebimento dos dados do cliente
         //UX (Se o cliente não estiver cadastrado, avisa o usuario e habilita cadastro)
         if (dadosCliente.length === 0) {
@@ -366,9 +338,9 @@ ipcMain.on('search-client', async (event, nomeCliente) => {
                 message: 'Cliente não cadastrado. \nDeseja cadastrar esse cliente?',
                 defaultId: 0,
                 buttons: ['Sim', 'Não']
-                
-            }).then((result)=>{
-                if(result.response === 0) {
+
+            }).then((result) => {
+                if (result.response === 0) {
                     // Setar o nome do cliente no form e habilitar cadastramento
                     event.reply('set-nameclient')
                 } else {
@@ -390,54 +362,205 @@ ipcMain.on('search-client', async (event, nomeCliente) => {
 ipcMain.on('update-client', async (event, cliente) => {
     console.log(cliente) //Teste do passo 2 - slide
 
-   try {
+    try {
         const clienteEditado = await clienteModel.findByIdAndUpdate(
-            cliente.idCli,{
+            cliente.idCli, {
             nomeCliente: cliente.nomeCli,
             foneCliente: cliente.foneCli,
             emailCliente: cliente.emailCli
         },
             {
-                new:true
+                new: true
             }
         )
         dialog.showMessageBox({
             type: 'info',
             title: 'aviso',
             message: "Dados do cliente alterados com sucesso",
-            buttons:['OK']
+            buttons: ['OK']
         })
         event.reply('reset-form')
-        } catch (error) {
+    } catch (error) {
         console.log(error)
-        
+
     }
-    
+
 })
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ipcMain.on('delete-client', (event, idCli) => {
     console.log(idCli)
-        dialog.showMessageBox({
-            type: 'error',
-            title: 'ATENÇÃO!',
-            message: 'Tem certeza que deseja que esse cliente seja exlcuido ?',
-            buttons: ['Sim', 'Não'],
-            defaultId: 0
-        }).then(async (result)=>{
-            if(result.response === 0) {
-                
-             try {
-               await clienteModel.findByIdAndDelete(idCli)
-               event.reply('reset-form')
+    dialog.showMessageBox({
+        type: 'error',
+        title: 'ATENÇÃO!',
+        message: 'Tem certeza que deseja que esse cliente seja exlcuido ?',
+        buttons: ['Sim', 'Não'],
+        defaultId: 0
+    }).then(async (result) => {
+        if (result.response === 0) {
+
+            try {
+                await clienteModel.findByIdAndDelete(idCli)
+                event.reply('reset-form')
             } catch (error) {
                 console.log(error)
             }
         }
-        })
+    })
 })
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD CREATE Fornecedor
+
+ipcMain.on('new-fornecedor', async (event, fornecedor) => {
+    console.log(fornecedor)
+    try {
+        const novoFornecedor = new fornecedorModel({
+            razaoFornecedor: fornecedor.razaoFor,
+            foneFornecedor: fornecedor.foneFor,
+            emailFornecedor: fornecedor.emailFor,
+            cnpjFornecedor: fornecedor.cnpjFor,
+            cepFornecedor: fornecedor.cepFor,
+            enderecoFornecedor: fornecedor.enderecoFor,
+            numeroFornecedor: fornecedor.numeroFor,
+            complementoFornecedor: fornecedor.complementoFor,
+            bairroFornecedor: fornecedor.bairroFor,
+            cidadeFornecedor: fornecedor.cidadeFor,
+            ufFornecedor: fornecedor.ufFor
+        })
+        console.log(novoFornecedor)   
+        await novoFornecedor.save()
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Aviso',
+            message: 'Fornecedor cadastrado com sucesso',
+            buttons: ['OK']
+        })
+        event.reply('reset-form')
+
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD READ Fornecedor
+    ipcMain.on('dialog-infoSearchSupp', (event)=>{
+        dialog.showMessageBox({
+            type: 'warning',
+            title: 'Atenção!',
+            message: 'Preencha a razão do Fornecedor no campo de busca',
+            buttons: ['OK']
+        })
+        event.reply('focus-search')
+    })
+    ipcMain.on('search-fornecedor', async (event, razaoFornecedor)=>{
+        console.log(razaoFornecedor)
+        try {
+            const dadosSupp = await fornecedorModel.find({razaoFornecedor: new RegExp(razaoFornecedor, 'i') })
+            console.log(dadosSupp)
+
+            if(dadosSupp.length === 0) {
+                dialog.showMessageBox({
+                    type: 'warning',
+                    title: 'Atenção!',
+                    message: 'Fornecedor não cadastrado. \nDeseja cadastrar esse fornecedor?',
+                    defaultId: 0,
+                    buttons: ['Sim', 'Não']
+    
+                }).then((result) => {
+                    if(result.response === 0) {
+                        event.reply('set-razaosupp')
+                    } else {
+                        event.reply('clear-search')
+                    }
+                })
+            } else {
+                event.reply('data-supp', JSON.stringify(dadosSupp))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD UPDATE Fornecedor
+ipcMain.on('update-supp', async (event, fornecedor)=> {
+    console.log(fornecedor)
+
+    if (fornecedor.razaoFor === '') {
+        dialog.showMessageBox({
+            type: 'warning',
+            title: 'Aviso',
+            message: 'Preencha os campos obrigatórios',
+            buttons: ['Ok'],
+            defaultId: 0
+        })
+        event.reply('focus-client')
+        return
+    }
+
+    try{
+        const fornecedorEditado = await fornecedorModel.findByIdAndUpdate(
+            fornecedor.idFor, {
+            razaoFornecedor: fornecedor.razaoFor,
+            foneFornecedor: fornecedor.foneFor,
+            emailFornecedor: fornecedor.emailFor,
+            cnpjFornecedor: fornecedor.cnpjFor,
+            cepFornecedor: fornecedor.cepFor,
+            enderecoFornecedor: fornecedor.enderecoFor,
+            numeroFornecedor: fornecedor.numeroFor,
+            complementoFornecedor: fornecedor.complementoFor,
+            bairroFornecedor: fornecedor.bairroFor,
+            cidadeFornecedor: fornecedor.cidadeFor,
+            ufFornecedor: fornecedor.ufFor
+            },
+            {
+                new: true
+            }
+        )
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'aviso',
+            message: "Dados do fornecedor alterados com sucesso",
+            buttons: ['OK']
+        })
+        event.reply('reset-form')
+    } catch(error) {
+        console.log(error)
+    }
+})
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Delete Fornecedor
+ipcMain.on('delete-supp', (event, idFor)=>{
+    console.log(idFor)
+    dialog.showMessageBox({
+        type: 'error',
+        title: 'ATENÇÃO!',
+        message: 'Tem certeza que deseja que esse fornecedor seja exlcuido ?',
+        buttons: ['Sim', 'Não'],
+        defaultId: 0
+    }).then(async (result) => {
+        if (result.response === 0) {
+            
+            try {
+                await fornecedorModel.findByIdAndDelete(idFor)
+                event.reply('reset-form')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    })
+})
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
 
 
 
